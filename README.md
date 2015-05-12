@@ -8,7 +8,8 @@ Major features if `csexec`, not presented in the Mono C# shell:
 
 * Full C# language features.
 * Ability to pass arguments to the script.
-* Script name passed as first argument.
+* Script file name passed as first argument.
+* Ability to run script in the terminal emulator.
 
 ## Install & prepare scripts
 
@@ -17,12 +18,11 @@ Major features if `csexec`, not presented in the Mono C# shell:
 chmod +x csexec
 sudo cp -f csexec /usr/bin
 ```
-2. Add `#!/usr/bin/csexec` at the beginning of C# source file.
+2. Add `#!/usr/bin/csexec` line at the beginning of C# source file.
 3. Make C# source file executable.
-4. Optionally change C# source file extension to ``.csx`.
+4. Optionally change C# source file extension to `.csx`.
 
-Compiler output (error, warining, etc.) logged into `csexec.log` file
-in the current directory.
+Note what `csexec` writes compiler messages to `csexec.log` file in the current directory, which may be not script directory!
 
 ## Basic console script
 

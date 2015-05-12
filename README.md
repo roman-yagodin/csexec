@@ -21,6 +21,9 @@ sudo cp -f csexec /usr/bin
 3. Make C# source file executable.
 4. Optionally change C# source file extension to ``.csx`.
 
+Compiler output (error, warining, etc.) logged into `csexec.log` file
+in the current directory.
+
 ## Basic console script
 
 ```C#

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# csexec
+# Copyright 2015 Roman M. Yagodin roman.yagodin@gmail.com
+# This source code is licensed on GPL v3 or any later version
+
+# set TMPDIR, also for mktemp
+export TMPDIR="$HOME/tmp/csexec"
+
+# create temp directory, if not exists
+mkdir -p "$TMPDIR"
+
+# copy (update) assemblies to temp directory
+cp -u $HOME/.config/csharp/*.dll "$TMPDIR"
+
+# use temp directory to get referenced assemblies
+COMPILER_ARGS="-lib:/$TMPDIR"
+
+# need to run in terminal?
+CSEXEC_ARGS=$1
+if [[ ${CSEXEC_ARGS:0:2} == "-t" || ${CSEXEC_ARGS:0:2} == "-T" ]]; then
+    TERMINAL_COMMAND="x-terminal-emulator -e"
+    CSEXEC_ARGS=${CSEXEC_ARGS:2}
+fi
+
+# get additional compiler args
+if [ -n $CSEXEC_ARGS ]; then
+    COMPILER_ARGS="$COMPILER_ARGS $CSEXEC_ARGS"
+    shift
+fi
+
+# script file is next arg
+SCRIPT_FILE=$1
+
+# don't pass script name to application
+# shift
+
+# get temporary filenames
+SOURCE_FILE="$(mktemp --tmpdir)"
+BINARY_FILE="$(mktemp --tmpdir)"
+
+# remove first (hashbang) line
+tail -n +2 "$SCRIPT_FILE" > $SOURCE_FILE
+
+# build & run
+dmcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> csexec.log && $TERMINAL_COMMAND mono $BINARY_FILE $@
+
+# remove temporary files
+rm -f $SOURCE_FILE $BINARY_FILE

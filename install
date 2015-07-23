@@ -1,0 +1,4 @@
+#!/bin/bash
+
+chmod +x csexec
+sudo cp -f csexec /usr/bin

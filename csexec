@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# csexec
+# csexec:
 # Copyright 2015 Roman M. Yagodin roman.yagodin@gmail.com
 # This source code is licensed on GPL v3 or any later version
 
@@ -16,24 +16,27 @@ cp -u $HOME/.config/csharp/*.dll "$TMPDIR"
 # use temp directory to get referenced assemblies
 COMPILER_ARGS="-lib:/$TMPDIR"
 
-# need to run in terminal?
-CSEXEC_ARGS=$1
-if [[ ${CSEXEC_ARGS:0:2} == "-t" || ${CSEXEC_ARGS:0:2} == "-T" ]]; then
-    TERMINAL_COMMAND="x-terminal-emulator -e"
-    CSEXEC_ARGS=${CSEXEC_ARGS:2}
-fi
+# compiler args should start with "-",
+# else the arg contains script file name
+if [[ ${1:0:1} == "-" ]]; then
+    CSEXEC_ARGS=$1
 
-# get additional compiler args
-if [ -n $CSEXEC_ARGS ]; then
-    COMPILER_ARGS="$COMPILER_ARGS $CSEXEC_ARGS"
+    # need to run in terminal?
+    if [[ ${CSEXEC_ARGS:0:2} == "-t" || ${CSEXEC_ARGS:0:2} == "-T" ]]; then
+        TERMINAL_COMMAND="x-terminal-emulator -e"
+        CSEXEC_ARGS=${CSEXEC_ARGS:2}
+    fi
+
+    # get additional compiler args
+    if [ -n "$CSEXEC_ARGS" ]; then
+        COMPILER_ARGS="$COMPILER_ARGS $CSEXEC_ARGS"
+    fi
+
     shift
 fi
 
-# script file is next arg
+# script file
 SCRIPT_FILE=$1
-
-# don't pass script name to application
-# shift
 
 # get temporary filenames
 SOURCE_FILE="$(mktemp --tmpdir)"

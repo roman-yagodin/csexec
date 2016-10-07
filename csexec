@@ -46,7 +46,7 @@ BINARY_FILE="$(mktemp --tmpdir)"
 tail -n +2 "$SCRIPT_FILE" > $SOURCE_FILE
 
 # build & run
-dmcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> csexec.log && $TERMINAL_COMMAND mono $BINARY_FILE $@
+mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> csexec.log && $TERMINAL_COMMAND mono $BINARY_FILE $@
 
 # remove temporary files
 rm -f $SOURCE_FILE $BINARY_FILE

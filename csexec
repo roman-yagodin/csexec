@@ -6,6 +6,7 @@
 
 # set TMPDIR, also for mktemp
 export TMPDIR="$HOME/tmp/csexec"
+CSEXEC_LOG="csexec.log"
 
 # create temp directory, if not exists
 mkdir -p "$TMPDIR"
@@ -45,8 +46,19 @@ BINARY_FILE="$(mktemp --tmpdir)"
 # remove first (hashbang) line
 tail -n +2 "$SCRIPT_FILE" > $SOURCE_FILE
 
-# build & run
-mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> csexec.log && $TERMINAL_COMMAND mono $BINARY_FILE $@
+# build
+mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> $CSEXEC_LOG
+COMPILER_EXIT_CODE=$?
+
+# if compiler log is empty, remove it
+if [ ! -s $CSEXEC_LOG ]; then
+    rm -f $CSEXEC_LOG
+fi
+
+# run
+if [ $COMPILER_EXIT_CODE -eq 0 ]; then
+    $TERMINAL_COMMAND mono $BINARY_FILE $@
+fi    
 
 # remove temporary files
 rm -f $SOURCE_FILE $BINARY_FILE

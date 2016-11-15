@@ -72,6 +72,15 @@ COMPILER_EXIT_CODE=$?
 
 popd
 
+# check working directory path length
+LANG_OLD=$LANG
+LANG=C
+if [ ${#PWD} -gt 260 ]; then
+    COMPILER_EXIT_CODE=1
+    echo "Error: Cannot run the script - path is too long." >> $CSEXEC_LOG
+fi
+LANG=$LANG_OLD
+
 if [ ! -s $CSEXEC_LOG ]; then
     # if compiler log is empty, remove it from the working directory (if it exists)
     rm -f "csexec.log"

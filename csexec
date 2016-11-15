@@ -21,9 +21,8 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# set TMPDIR, also for mktemp
+# set TMPDIR, also for "mktemp --tmpdir"
 export TMPDIR="$HOME/tmp/csexec"
-CSEXEC_LOG="csexec.log"
 
 # create temp directory, if not exists
 mkdir -p "$TMPDIR"
@@ -54,28 +53,37 @@ if [[ ${1:0:1} == "-" ]]; then
 fi
 
 # script file
-SCRIPT_FILE=$1
+SCRIPT_FILE="$1"
 
 # get temporary filenames
 SOURCE_FILE="$(mktemp --tmpdir)"
 BINARY_FILE="$(mktemp --tmpdir)"
+CSEXEC_LOG="$(mktemp --tmpdir)"
 
 # remove first (hashbang) line
 tail -n +2 "$SCRIPT_FILE" > $SOURCE_FILE
+
+pushd . > /dev/null
+cd $TMPDIR
 
 # build
 mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> $CSEXEC_LOG
 COMPILER_EXIT_CODE=$?
 
-# if compiler log is empty, remove it
+popd
+
 if [ ! -s $CSEXEC_LOG ]; then
-    rm -f $CSEXEC_LOG
+    # if compiler log is empty, remove it from the working directory (if it exists)
+    rm -f "csexec.log"
+else
+    # otherwise, copy log to the working directory
+    cp -f $CSEXEC_LOG "csexec.log"
 fi
 
 # run
 if [ $COMPILER_EXIT_CODE -eq 0 ]; then
-    $TERMINAL_COMMAND mono $BINARY_FILE $@
+    $TERMINAL_COMMAND mono $BINARY_FILE "$@"
 fi    
 
 # remove temporary files
-rm -f $SOURCE_FILE $BINARY_FILE
+rm -f $SOURCE_FILE $BINARY_FILE $CSEXEC_LOG

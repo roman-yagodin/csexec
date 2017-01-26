@@ -70,7 +70,7 @@ cd $TMPDIR
 mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> $CSEXEC_LOG
 COMPILER_EXIT_CODE=$?
 
-popd
+popd > /dev/null
 
 # check working directory path length
 LANG_OLD=$LANG

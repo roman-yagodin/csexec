@@ -5,12 +5,12 @@ It is evolved from the original idea described here on [StackOverflow](http://st
 
 ## Features
 
-Major features if `csexec`, not available in the Mono C# shell:
+Major features if `csexec`, not available in the Mono C# REPL (`csharp`):
 
 * Full C# language features at your fingers!
-* Ability to pass command-line arguments to the script.
-* Script source file name is available as a first argument.
 * Ability to run script in a terminal emulator.
+* Ability to pass command-line arguments to the script ([csharp also supports this since Mono 5.0.0](http://www.mono-project.com/docs/about-mono/releases/5.0.0/#csharp)).
+* Script source file name is available as a first argument.
 
 ## License
 

@@ -67,7 +67,7 @@ pushd . > /dev/null
 cd $TMPDIR
 
 # build
-mcs $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> $CSEXEC_LOG
+csc $COMPILER_ARGS $SOURCE_FILE -out:$BINARY_FILE &> $CSEXEC_LOG
 COMPILER_EXIT_CODE=$?
 
 popd > /dev/null

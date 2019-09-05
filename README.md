@@ -5,7 +5,7 @@ It is evolved from the original idea described here on [StackOverflow](http://st
 
 ## Features
 
-Major features if `csexec`, not available in the Mono C# REPL (`csharp`):
+Major `csexec` features comparing to the Mono C# REPL (`csharp`):
 
 * Full C# language features at your fingers!
 * Ability to run script in a terminal emulator.
